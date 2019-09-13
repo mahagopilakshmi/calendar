@@ -1,0 +1,139 @@
+<!DOCTYPE html >
+<html lang="en">
+  <head>
+    <title>MY DATEPICKER</title>
+    	<script   src="https://code.jquery.com/jquery-3.2.1.js" type="text/javascript" > </script>
+    <script type="text/javascript">
+    	var currPage = 0; //month
+		var year ;
+		var day;
+
+		function getVal(e)
+		{
+			 //lert(document.getElementById(e.id).value);
+			 day = document.getElementById(e.id).value;
+			 document.getElementById("date_picker").value = year +"/"+  (currPage + 1)  + "/" + day ;
+		}
+		$(document).ready(function(){
+			$("#date_picker").focus(function(){
+					getDays(8);
+					$("#datepicker").css("display"," block");
+				});
+
+			$("#prev-y").click(function(){
+				console.log("previous year");
+				$("#year").text(  parseInt($("#year").text())  - 1   )  ;
+					getDays(currPage);
+			});
+			$("#next-y").click(function(){
+				console.log("next year");
+				$("#year").text(  parseInt($("#year").text())  + 1   )  ;
+					getDays(currPage);
+			});
+			$("#next-month").click(function(){
+				console.log("next month");
+				if(currPage < 12)
+				{
+					currPage =  currPage+1;
+					getDays(currPage);
+				}
+
+			});
+
+			$("#prev-month").click(function(){
+					console.log("previous month");
+					if(currPage > 0)
+					{
+						currPage =  currPage-1;
+						getDays(currPage);
+					}
+			});
+			
+			function getDays(month)
+			{
+
+				$("#dt-table").empty();
+				var mos=['January','February','March','April','May','June','July','August','September','October','Novemeber','Decemeber']
+				var day=['Sun', 'Mon', 'Tue', 'Wed' , 'Thu', 'Fri', 'Sat']
+				year = parseInt($("#year").text());
+
+				$("#month-title").html(mos[month]);
+
+				$("#dt-table").append('<tr>');
+				for(i = 0; i < 7; i++)
+				{
+
+					$('#dt-table').append("<td id='dt-head'>"  + day[i] + "</td>");
+				}
+
+				$("#dt-table").append('</td>');
+
+				var firstDay = new Date(year,month, 1);
+				var lastDay = new Date(year, month+1, 0);
+				console.log("first day ",firstDay+" "+lastDay);
+
+		
+				var offset = firstDay.getDay();
+
+				var dayCount = 1;
+				for (i = 0; i < 5; i++)
+				{
+					$('#dt-table').append("<tr id=row-"+ i +">");
+					for(rw = 0; rw < 7; rw++ )
+					{
+						if(offset == 0)
+						{
+
+							$('#' + "row-"+ i).append("<td  id='"  + "cell-" + dayCount+ "'>"
+							 +   "<input type='button' id ='day_val" +dayCount +"'"+   " onclick='getVal(this)' value= '" +  dayCount + "' >"  + 
+							 	
+							 '</td>' );
+							
+
+							if(dayCount >= lastDay.getDate())
+							{
+								break;
+							}
+							dayCount++;
+						}else
+						{
+							$('#' + "row-"+ i).append('<td>' +'</td>' );
+							 offset--;
+
+						}
+
+		
+
+
+					}
+					$('#dt-table').append('</tr>');
+
+				}
+			}
+		});
+		
+    </script>
+  </head>
+  <body>
+
+<input type="text" id="date_picker" >
+<div id="datepicker" style="display:none">
+<h4 id="month-title"></h4>
+		<input type="button" name="prev-y" value="Prev Year"  id="prev-y" >
+			<span id="year">2019</span>	
+		<input type="button" name="next-y" value="Next Year"  id="next-y" >
+	<table id="dt-table" >
+
+
+
+
+<td class="day_val"> </td>
+
+
+	</table>
+
+	<input type="button" name="prev" value="Prev Mo"  id="prev-month" >
+	<input type="button" name="next" value="Next Mo"  id="next-month" >
+</div>
+</body>
+</html>
